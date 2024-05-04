@@ -7,6 +7,10 @@
  *
  * @author Faraz
  */
+import java.sql.*;
+import Project.ConnectionProvider;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 public class updateQuestion extends javax.swing.JFrame {
 
     /**
@@ -137,16 +141,36 @@ public class updateQuestion extends javax.swing.JFrame {
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/search.png"))); // NOI18N
         jButton2.setText("Search");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 110, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/save.png"))); // NOI18N
         jButton3.setText("Update");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(329, 496, -1, -1));
 
         jButton4.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/clear.png"))); // NOI18N
         jButton4.setText("Clear");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(531, 496, -1, -1));
 
         jTextField7.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
@@ -155,7 +179,7 @@ public class updateQuestion extends javax.swing.JFrame {
                 jTextField7ActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 430, 620, -1));
+        getContentPane().add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 430, 630, -1));
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/yellow ppt bg.PNG"))); // NOI18N
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1080, 550));
@@ -168,6 +192,8 @@ public class updateQuestion extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        adminHome.open=0;
+        setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
@@ -185,6 +211,98 @@ public class updateQuestion extends javax.swing.JFrame {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        String id = jTextField1.getText();
+        try{
+        Connection con = ConnectionProvider.getCon();
+        Statement s = con.createStatement();
+        ResultSet rs = s.executeQuery("Select * from question where id='"+id+"'");
+        if(rs.next())
+        {
+            jTextField2.setText(rs.getString(2));
+            jTextField3.setText(rs.getString(3));
+            jTextField4.setText(rs.getString(4));
+            jTextField5.setText(rs.getString(5));
+            jTextField6.setText(rs.getString(6));
+            jTextField7.setText(rs.getString(7));
+            jTextField1.setEditable(false);
+               
+        }
+            else{
+            JFrame jf = new JFrame();
+            jf.setAlwaysOnTop(true);
+            JOptionPane.showMessageDialog(jf,"Question id does not exist!");
+        }
+        }
+        catch(Exception e){
+                 
+            JFrame jf = new JFrame();
+            jf.setAlwaysOnTop(true);
+            JOptionPane.showMessageDialog(jf,e);
+        
+        }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        String id = jTextField1.getText();
+        String name = jTextField2.getText();
+        String opt1 = jTextField3.getText();
+        String opt2 = jTextField4.getText();
+        String opt3 = jTextField5.getText();
+        String opt4 = jTextField6.getText();
+        String answer = jTextField7.getText();
+        
+        try{
+            Connection con = ConnectionProvider.getCon();
+           PreparedStatement ps = con.prepareStatement("update question set name=?,opt1=?,opt2=?,opt3=?,opt4=?,answer=? where id=?");
+           ps.setString(1, name);
+           ps.setString(2, opt1);
+           ps.setString(3, opt2);
+           ps.setString(4, opt3);
+           ps.setString(5, opt4);
+           ps.setString(6, answer);
+           ps.setString(7, id);
+           ps.executeUpdate();
+           JFrame jf = new JFrame();
+            jf.setAlwaysOnTop(true);
+            JOptionPane.showMessageDialog(jf,"Successfully Updated!");
+            setVisible(false);
+            new updateQuestion().setVisible(true);
+           
+            
+        }
+        catch(Exception e)
+        {
+            JFrame jf = new JFrame();
+            jf.setAlwaysOnTop(true);
+            JOptionPane.showMessageDialog(jf,e);
+        }
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        jTextField5.setText("");
+        jTextField6.setText("");
+        jTextField7.setText("");
+        jTextField1.setEditable(true);
+        
+        
+        
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2MouseClicked
 
     /**
      * @param args the command line arguments

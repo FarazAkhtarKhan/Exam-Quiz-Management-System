@@ -63,6 +63,11 @@ public class adminHome extends javax.swing.JFrame {
         jMenu2.setText("Update Question");
         jMenu2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jMenu2.setMargin(new java.awt.Insets(0, 5, 0, 30));
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu2MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu2);
 
         jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/all questions.png"))); // NOI18N
@@ -149,6 +154,21 @@ public class adminHome extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(jf,"One Form is already Open");
         }
     }//GEN-LAST:event_jMenu1MouseClicked
+
+    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+        // TODO add your handling code here:
+                if(open == 0 )
+        {
+            new updateQuestion().setVisible(true);
+            open = 1;
+        }
+        else{
+                       JFrame jf = new JFrame();
+            jf.setAlwaysOnTop(true);
+            JOptionPane.showMessageDialog(jf,"One Form is already Open");
+        }
+        
+    }//GEN-LAST:event_jMenu2MouseClicked
 
     /**
      * @param args the command line arguments
